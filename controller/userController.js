@@ -1,7 +1,8 @@
+const { default: mongoose } = require('mongoose');
 const User = require('../model/userModel');
 
 
-async function getAllUser(req, res){
+async function getAllUser(req, res) {
     const result = await User.find({})
     if (result) {
         console.log(result)
@@ -25,19 +26,19 @@ async function getAllUser(req, res){
     }
 }
 
-async function createUser(req, res){
+async function createUser(req, res) {
     const body = req.body;
     if (!body.first_name || !body.last_name || !body.email || !body.job_title || !body.gender) {
         return res.status(400).json({ msg: "All fields are required." });
     }
 
-    const result = await User.create({
+    await User.create({
         firstName: body.first_name,
         lastName: body.last_name,
         email: body.email,
         jobTitle: body.job_title,
         gender: body.gender
-    }).then(() => {
+    }).then((result) => {
         if (result) {
             return res.status(201).json({ msg: "Users has been created" })
         } else {
@@ -48,7 +49,7 @@ async function createUser(req, res){
     })
 }
 
-async function getParticuarUserData(req, res){
+async function getParticuarUserData(req, res) {
     console.log(req.params.id)
     const result = await User.findOne({ email: req.params?.id });
     if (result) {
@@ -66,13 +67,25 @@ async function getParticuarUserData(req, res){
     }
 }
 
-async function updateParticularUserData(req, res){
-    return res.status(200).send("Working on it.")
+async function updateParticularUserData(req, res) {
+    const body = req.body;
+    const result = await User.findOne({ email: req.params?.id });
+    if (result) {
+        const userUpdate = await User.updateOne({ ...req.body })
+        console.log(userUpdate)
+    }
+    return res.status(200).json({ msg: "User has been updated." })
 }
 
-async function deleteParticularUserData(req, res){
-    return res.status(200).send("Working on it.")
+async function deleteParticularUserData(req, res) {
+    const body = req.body;
+    const result = await User.findOne({ email: req.params?.id });
+    if (result) {
+        const deleteUser = await User.deleteOne({ email: req.params?.id })
+        console.log(deleteUser)
+    }
+    return res.status(200).json({ msg: "User has been deleted." })
 }
 
 
-module.exports= {getAllUser, createUser, getParticuarUserData, updateParticularUserData, deleteParticularUserData}
+module.exports = { getAllUser, createUser, getParticuarUserData, updateParticularUserData, deleteParticularUserData }

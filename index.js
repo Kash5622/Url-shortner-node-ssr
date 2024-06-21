@@ -10,6 +10,7 @@ const connectDatabase = require("./connection")
 //Router Import
 const userRouter = require("./routes/userRouter")
 const homeRouter = require("./routes/homeRouter")
+const urlRouter = require("./routes/urlRoute")
 
 // Middleware
 const { createLog } = require("./middleware/index")
@@ -27,6 +28,7 @@ app.use(createLog(process.env.FILE_NAME))
 app.use('/', homeRouter)
 
 app.use('/api/users', userRouter);
+app.use('/api/urls', urlRouter);
 
 
 app.listen(5001)
