@@ -5,10 +5,6 @@ const User = require('../model/userModel');
 async function getAllUser(req, res) {
     const result = await User.find({})
     if (result) {
-        console.log(result)
-        // const userData = `<ul>
-        //         ${result.map((data) => { return '<li>'+data.firstName+" "+data.lastName+"  "+data.email+" "+'</li>' })}
-        //     </ul>`
         const userData = [];
         result.forEach((data) => {
             userData.push({
