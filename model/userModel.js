@@ -13,11 +13,9 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    jobTitle: {
-        type: String
-    },
-    gender: {
-        type: String
+    password:{
+        type: String,
+        required: true
     }
 },
     { timestamps: true }

@@ -3,14 +3,14 @@ const { getAllUser, createUser, getParticuarUserData, updateParticularUserData, 
 
 const router = express.Router();
 
-router.route("/")
-    .get(getAllUser)
-    .post(createUser);
-
-
+router.route("/").get(getAllUser)
+    
 router.route("/:id")
-    .get(getParticuarUserData)
-    .delete(deleteParticularUserData)
-    .patch(updateParticularUserData);
+.delete(deleteParticularUserData)
+.patch(updateParticularUserData);
+
+router.route("/login").post(getParticuarUserData)
+router.route("/signup").post(createUser)
+
 
 module.exports = router

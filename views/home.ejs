@@ -45,23 +45,11 @@
                                 </li>
                             </ul>
                         </li> -->
-                        <li class="d-sm-none text-center">
-                            <a href="<%= process.env.BASE_URL %>/login" class="header-button active">Login</a>
-                        </li>
-                        <li class="d-sm-none text-center">
-                            <a href="<%= process.env.BASE_URL %>/register" class="mb-4 header-button">Register</a>
-                        </li>
                     </ul>
                     <div class="header-bar d-lg-none mr-sm-3">
                         <span></span>
                         <span></span>
                         <span></span>
-                    </div>
-                    <div class="header-right">
-                        <a href="<%= process.env.BASE_URL %>/login"
-                            class="header-button d-none d-sm-inline-block m-0 active">Login</a>
-                        <a href="<%= process.env.BASE_URL %>/register"
-                            class="header-button d-none d-sm-inline-block m-0">Register</a>
                     </div>
                 </div>
             </div>
@@ -121,6 +109,35 @@
                                         <p>Happy users registered</p>
                                     </div>
                                 </div>
+                </div>
+                <div class="banner-form-group mt-5">
+                    <% if (locals.errorHome && allUrls) { %>
+                        <h5 class="subtitle text-danger"><%= errorHome %></h5>
+                    <% }else{ %>
+                        <h3 class="subtitle">Your all Shorten URLS</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Sl. No.</th>
+                                    <th scope="col">Short Id</th>
+                                    <th scope="col">Short URL</th>
+                                    <th scope="col">Redirect URL</th>
+                                    <th scope="col">Total Views</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% allUrls.forEach((element, index) => { %>
+                                    <tr>
+                                        <th scope="row"><%= index+1  %></th>
+                                        <td><%= element.shortId  %></td>
+                                        <td><%= process.env.BASE_URL+"/"+element.shortId  %></td>
+                                        <td><%= element.redirectUrl  %></td>
+                                        <td><%= element.visitedHistory.length %></td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    <% } %>
                 </div>
             </div>
         </section>

@@ -4,6 +4,8 @@ const bodyparser = require('body-parser')
 const { type } = require('os');
 const app = express();
 const path = require("path")
+const {userAuthValidate}= require("./middleware/userAuth")
+const cookieParser= require("cookie-parser")
 
 // Db connection
 const connectDatabase = require("./connection")
@@ -27,13 +29,14 @@ app.use("/views", express.static('views'))
 
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: false }))
+app.use(cookieParser())
 
 app.use(createLog(process.env.FILE_NAME))
 
 app.use('/', homeRouter)
 
 app.use('/api/users', userRouter);
-app.use('/api/urls', urlRouter);
+app.use('/api/urls',userAuthValidate, urlRouter);
 
 
 

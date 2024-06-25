@@ -1,5 +1,7 @@
 const { default: mongoose } = require('mongoose');
 const User = require('../model/userModel');
+const {getUser, setUser}= require("../services/auth")
+const {v4: uuidV4}= require("uuid")
 
 
 async function getAllUser(req, res) {
@@ -24,42 +26,35 @@ async function getAllUser(req, res) {
 
 async function createUser(req, res) {
     const body = req.body;
-    if (!body.first_name || !body.last_name || !body.email || !body.job_title || !body.gender) {
-        return res.status(400).json({ msg: "All fields are required." });
+    if (!body.first_name || !body.last_name || !body.email || !body.password) {
+        return res.redirect("/register");
     }
 
     await User.create({
         firstName: body.first_name,
         lastName: body.last_name,
         email: body.email,
-        jobTitle: body.job_title,
-        gender: body.gender
+        password: body.password
     }).then((result) => {
         if (result) {
-            return res.status(201).json({ msg: "Users has been created" })
+            return res.redirect("/login");
         } else {
-            return res.status(400).json({ msg: "Something went wrong" })
+            return res.redirect("/signup", { msg: "Something went wrong!" });
         }
     }).catch((err) => {
-        return res.status(400).json({ msg: "Something went wrong - " + err.message })
+        return res.redirect("/signup", { msg: "Something went wrong!" });
     })
 }
 
 async function getParticuarUserData(req, res) {
-    console.log(req.params.id)
-    const result = await User.findOne({ email: req.params?.id });
+    const result = await User.findOne({ email: req.body?.email, password: req.body?.password });
     if (result) {
-        const userData = {
-            firstName: result.firstName,
-            lastName: result.lastName,
-            email: result.email,
-            jobTitle: result.jobTitle,
-            gender: result.gender
-        }
-
-        return res.status(200).json(userData);
+        const sessionId = uuidV4()
+        setUser(sessionId, result);
+        res.cookie('uid', sessionId)
+        return res.redirect("/home");
     } else {
-        return res.status(200).json({ msg: "No data found" })
+        return res.redirect("/signin")
     }
 }
 
